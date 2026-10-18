@@ -1,0 +1,223 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Shantell Sans", ui-rounded, system-ui, sans-serif;
+  --font-hand: "Caveat", "Shantell Sans", cursive;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-desk: var(--desk);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-card: var(--card);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+}
+
+:root {
+  --paper: #f4efe3;
+  --paper-2: #fbf7ee;
+  --desk: #ddd3bf;
+  --ink: #1d1b18;
+  --ink-soft: #1d1b18a8;
+  --card: #fffdf7;
+  --accent: #ff6b5b;
+  --accent-ink: #b8392b;
+  --tape: #ffd966a8;
+  --dot: #cfc6b1;
+  --code-bg: #1d1b18;
+  --code-ink: #ecebe7;
+  --icon-color: currentColor;
+  --icon-stroke: 2.2;
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --paper: #17161a;
+  --paper-2: #1d1c21;
+  --desk: #0e0e10;
+  --ink: #ecebe7;
+  --ink-soft: #ecebe7a6;
+  --card: #222128;
+  --accent: #ff6b5b;
+  --accent-ink: #ff8f82;
+  --tape: #ffd96638;
+  --dot: #2f2d35;
+  --code-bg: #0e0e10;
+  --code-ink: #ecebe7;
+  color-scheme: dark;
+}
+
+html {
+  background: var(--desk);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--dot) 1px, transparent 1.2px);
+  background-size: 18px 18px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-variation-settings: "INFM" 40;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2.5px dashed var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+::selection {
+  background: #ff6b5b55;
+}
+
+.hand {
+  font-family: var(--font-hand);
+}
+
+.card {
+  background: var(--card);
+  border: 2px solid var(--ink);
+  border-radius: 12px 18px 10px 20px;
+  box-shadow: 3px 4px 0 var(--ink);
+}
+
+.sk {
+  background: var(--card);
+  border: 2.5px solid var(--ink);
+  border-radius: 18px 8px 16px 7px / 8px 16px 7px 18px;
+}
+
+.tape {
+  display: inline-block;
+  background: var(--tape);
+  padding: 3px 14px;
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  transform: rotate(-3deg);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.12s ease;
+}
+
+.btn:hover {
+  transform: rotate(-1.5deg) translateY(-1px);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-ink {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.btn-accent {
+  background: var(--accent);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.chip[aria-pressed="true"],
+.chip.on {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.zi {
+  flex: none;
+  color: var(--icon-color);
+  stroke-width: var(--icon-stroke);
+}
+
+.zi-plain {
+  flex: none;
+}
+
+html[data-boil="off"] .zi-boil,
+html[data-boil="off"] .zi-boil-sm,
+html[data-boil="off"] .wob {
+  animation: none !important;
+  filter: none !important;
+}
+
+@keyframes wob {
+  0%,
+  100% {
+    transform: rotate(-2deg) translateY(0);
+  }
+  50% {
+    transform: rotate(2deg) translateY(-3px);
+  }
+}
+
+.wob {
+  display: inline-block;
+  animation: wob 1.7s ease-in-out infinite;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  line-height: 1.6;
+  background: var(--code-bg);
+  color: var(--code-ink);
+  padding: 14px 16px;
+  border-radius: 4px 14px 12px 16px;
+  white-space: pre;
+  overflow: auto;
+  tab-size: 2;
+}
+
+.prose-sk p,
+.prose-sk li {
+  line-height: 1.7;
+  max-width: 68ch;
+}
+
+.prose-sk h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  font-variation-settings: "BNCE" 60, "INFM" 100;
+  margin: 2.4rem 0 0.6rem;
+}
+
+.prose-sk code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: var(--card);
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 0 5px;
+}

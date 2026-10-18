@@ -1,0 +1,16 @@
+{
+  "name": "zicons-monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "site"
+  ],
+  "scripts": {
+    "build:icons": "npm run build -w zicons",
+    "dev": "npm run build:icons && npm run dev -w site",
+    "build": "npm run build:icons && npm run build -w site",
+    "preview": "npm run preview -w site",
+    "test": "npm test --workspaces --if-present"
+  }
+}

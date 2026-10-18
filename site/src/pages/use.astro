@@ -1,0 +1,92 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Wobbly from "../components/Wobbly.astro";
+import { SITE } from "../config";
+import { getIcon } from "../data/icons";
+import { DEFAULTS } from "../lib/settings";
+import { snippet } from "../lib/snippets";
+
+const heart = getIcon("heart");
+const inline = snippet("svg", heart, DEFAULTS).replace(/d="[^"]+"/, 'd="M12.16 19.38Q11.91 19.43…"');
+const sprite = `<svg width="24" height="24" fill="none" stroke="currentColor"
+     stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <use href="/sprite.svg#heart" />
+</svg>`;
+const img = `<img src="/svg/heart.svg" width="24" height="24" alt="Favourite" />`;
+const wobbleTag = `<script src="${SITE.url}/wobble/v1.js"></script>
+
+<svg class="zi-boil-sm" …>…</svg>
+<svg class="zi-boil" …>…</svg>`;
+const wobbleOpts = `<script src="${SITE.url}/wobble/v1.js" data-respect-reduced-motion></script>`;
+const wobbleManual = `<script src="${SITE.url}/wobble/v1.js" data-manual></script>
+<script>
+  zicons.wobble({ respectReducedMotion: true });
+</script>`;
+---
+
+<Base title="Using the icons · zicons" description="How to use zicons as inline SVG, a sprite, an image, or with the wobble helper.">
+  <article class="prose-sk pt-10">
+    <span class="tape">using them</span>
+    <Wobbly text="put them anywhere" tag="h1" class="mt-4 text-[clamp(2.6rem,7vw,4.6rem)]" />
+    <p class="mt-6">
+      Every icon is one small SVG. Open an icon, set the colour, size and stroke you like, and copy it in the format you
+      need. A few things aren't obvious, so they're here.
+    </p>
+
+    <h2>Inline SVG</h2>
+    <p>
+      Paste the SVG straight into your HTML. With the default <code>stroke="currentColor"</code> the icon takes the
+      colour of the text around it, so <code>color: tomato</code> on a parent turns it tomato.
+    </p>
+    <pre class="code">{inline}</pre>
+
+    <h2>The sprite</h2>
+    <p>
+      <a href="/sprite.svg" download>sprite.svg</a> holds every icon as a <code>&lt;symbol&gt;</code>. Point a
+      <code>&lt;use&gt;</code> at it and set the stroke on the outer <code>&lt;svg&gt;</code>, since the symbols leave
+      the stroke width to you. Host the sprite on your own site: browsers block <code>&lt;use&gt;</code> from pulling a
+      file off another domain.
+    </p>
+    <pre class="code">{sprite}</pre>
+
+    <h2>As an image</h2>
+    <p>
+      Each icon is also a file at <code>/svg/&lt;name&gt;.svg</code>, for example <a href="/svg/heart.svg">heart.svg</a>.
+      An <code>&lt;img&gt;</code> draws it in black: <code>currentColor</code> only works when the SVG is inline. To get
+      another colour, copy the icon with that colour from its page, or download it as SVG or PNG.
+    </p>
+    <pre class="code">{img}</pre>
+
+    <h2 id="wobble">The wobble</h2>
+    <p class="flex items-center gap-3">
+      <Icon name="sparkle" size={22} plain boil="sm" />
+      The shimmer you see on this site works on your pages too. Add the helper once, then give an icon <code>zi-boil-sm</code> (14–24 px) or a big drawing <code>zi-boil</code>.
+    </p>
+    <pre class="code">{wobbleTag}</pre>
+    <p>
+      It runs for everyone by default. To pause it for people who ask their system to reduce motion, add one attribute:
+    </p>
+    <pre class="code">{wobbleOpts}</pre>
+    <p>Or start it yourself:</p>
+    <pre class="code">{wobbleManual}</pre>
+    <p>
+      Rather not load a script? The <strong>+ wobble</strong> tab on every icon page gives you the filter and the CSS to
+      paste in directly.
+    </p>
+
+    <h2>Accessibility</h2>
+    <p>
+      Icons next to a text label are decoration: keep <code>aria-hidden="true"</code>. An icon that stands alone, like a
+      close button, needs a name on the button: <code>&lt;button aria-label="Close"&gt;</code>.
+    </p>
+  </article>
+</Base>
+
+<style>
+  .code {
+    margin: 14px 0 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+</style>

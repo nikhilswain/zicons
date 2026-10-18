@@ -1,0 +1,17 @@
+---
+import Icon from "./Icon.astro";
+import { SITE } from "../config";
+---
+
+<footer class="mx-auto mt-24 max-w-[1240px] px-4 pb-10 sm:px-6">
+  <div class="flex flex-wrap items-center gap-x-6 gap-y-2 border-t-2 border-dashed border-ink-soft pt-6 text-sm">
+    <span class="hand flex items-center gap-2 text-xl">
+      <Icon name="heart" size={18} plain boil="sm" />
+      made by <a href={SITE.authorUrl}>{SITE.author}</a>
+    </span>
+    <a href={SITE.zketch}>zketch, the doodle app</a>
+    {SITE.github && <a href={SITE.github}>GitHub</a>}
+    <a href="/license">MIT license</a>
+    <a href="/sprite.svg" download>sprite.svg</a>
+  </div>
+</footer>

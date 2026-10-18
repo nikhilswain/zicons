@@ -1,0 +1,14 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Wobbly from "../components/Wobbly.astro";
+---
+
+<Base title="Page not found · zicons" description="This page isn't in the sketchbook.">
+  <section class="flex flex-col items-center py-24 text-center">
+    <Icon name="eraser" size={96} plain boil="big" />
+    <Wobbly text="erased" class="mt-6 text-6xl" />
+    <p class="hand mt-3 text-2xl">this page got rubbed out of the sketchbook.</p>
+    <a href="/" class="btn sk btn-ink mt-8">Back to all icons</a>
+  </section>
+</Base>

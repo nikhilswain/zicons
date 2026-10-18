@@ -1,0 +1,26 @@
+---
+interface Props {
+  text: string;
+  tag?: "h1" | "h2" | "span" | "div";
+  class?: string;
+}
+
+const { text, tag: Tag = "h1", class: cls = "" } = Astro.props;
+const letters = [...text];
+---
+
+<Tag class:list={["wobbly", cls]} aria-label={text}>
+  {letters.map((ch, k) => (
+    <span class="wob" aria-hidden="true" style={`animation-delay:${-((k * 0.37) % 1.7).toFixed(2)}s`}>{ch === " " ? " " : ch}</span>
+  ))}
+</Tag>
+
+<style>
+  .wobbly {
+    margin: 0;
+    font-weight: 800;
+    font-variation-settings: "BNCE" 90, "INFM" 100;
+    line-height: 1;
+    letter-spacing: 0.01em;
+  }
+</style>

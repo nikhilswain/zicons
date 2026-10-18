@@ -1,0 +1,324 @@
+---
+import Base from "../layouts/Base.astro";
+import Icon from "../components/Icon.astro";
+import Wobbly from "../components/Wobbly.astro";
+import { groups, icons } from "../data/icons";
+import { SITE } from "../config";
+
+const doodles = [
+  { name: "pencil", style: "top:8%;left:4%;--r:-14deg", size: 54 },
+  { name: "heart", style: "top:2%;left:46%;--r:10deg;color:var(--accent)", size: 46 },
+  { name: "cloud", style: "top:40%;left:68%;--r:-6deg", size: 64 },
+  { name: "star", style: "top:62%;left:12%;--r:12deg", size: 44 },
+  { name: "palette", style: "top:70%;left:44%;--r:-9deg", size: 52 },
+  { name: "magic-wand", style: "top:12%;left:80%;--r:8deg", size: 42 },
+];
+---
+
+<Base
+  title="zicons · brush-drawn icons"
+  description={`${icons.length} brush-drawn icons from Zketch. Browse, restyle and copy them as SVG, HTML, React, Vue or Svelte.`}
+  wide
+>
+  <section class="hero relative grid items-center gap-6 pt-10 pb-8 md:grid-cols-[1.2fr_1fr] md:pt-14">
+    <div class="relative z-10">
+      <span class="tape mb-5">{icons.length} icons, all brush-drawn</span>
+      <Wobbly text="zicons" class="title" />
+      <p class="hand mt-3 text-[1.75rem] leading-tight">
+        a brush-drawn icon set from <a href={SITE.zketch} class="mark">zketch</a>, the doodle app.
+        <br />free to use, MIT licensed.
+      </p>
+    </div>
+    <div class="doodles relative hidden h-[260px] md:block" aria-hidden="true">
+      {doodles.map((d) => (
+        <span class="doodle" style={d.style}>
+          <Icon name={d.name} size={d.size} plain boil="big" />
+        </span>
+      ))}
+    </div>
+  </section>
+
+  <section class="sticky top-0 z-20 -mx-4 bg-paper/90 px-4 py-3 backdrop-blur-sm sm:-mx-6 sm:px-6" aria-label="Find icons">
+    <div class="flex flex-wrap items-center gap-3">
+      <label class="search sk flex min-w-0 flex-1 items-center gap-3 px-4 py-2.5 sm:max-w-[440px]">
+        <Icon name="search" size={20} plain />
+        <span class="sr-only">Search icons</span>
+        <input id="q" type="search" placeholder="find an icon… pencil, cloud, heart" autocomplete="off" spellcheck="false" />
+        <kbd class="hand text-lg opacity-60">/</kbd>
+      </label>
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Groups">
+        <button type="button" class="chip sk" data-group="" aria-pressed="true">all <span class="opacity-60">{icons.length}</span></button>
+        {groups.map((g) => (
+          <button type="button" class="chip sk" data-group={g.key} aria-pressed="false">
+            {g.title.toLowerCase()} <span class="opacity-60">{g.count}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+    <p id="pen" class="hand mt-2 hidden items-center gap-2 text-lg">
+      <span class="pen-dot"></span>
+      <span id="pen-text"></span>
+      <button type="button" id="pen-reset" class="underline decoration-dashed">reset</button>
+    </p>
+  </section>
+
+  <section class="pt-6" aria-label="Icons">
+    <p id="count" class="hand mb-4 text-xl text-ink-soft" aria-live="polite">{icons.length} icons</p>
+    <ul id="grid" class="icon-grid">
+      {icons.map((i) => (
+        <li class="cell" data-name={i.name} data-group={i.group} data-tags={i.tags.join("|")}>
+          <a href={`/icons/${i.name}`} class="tile card">
+            <Icon name={i.name} size={30} boil="sm" />
+            <span class="name">{i.name}</span>
+          </a>
+          <button type="button" class="qc sk" aria-label={`Copy ${i.name} SVG`} title="Copy SVG">
+            <Icon name="copy" size={14} plain />
+          </button>
+        </li>
+      ))}
+    </ul>
+    <div id="empty" class="hidden flex-col items-center py-20 text-center">
+      <Icon name="eraser" size={64} plain boil="big" />
+      <p class="hand mt-4 text-3xl">nothing in the sketchbook for “<span id="empty-q"></span>”</p>
+      <p class="mt-2 text-ink-soft">Try a simpler word, like arrow, file or paint.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  :global(.title) {
+    font-size: clamp(4.5rem, 14vw, 9.5rem);
+  }
+  .mark {
+    text-decoration: none;
+    background: linear-gradient(transparent 55%, #ff6b5b66 55%, #ff6b5b66 88%, transparent 88%);
+    padding: 0 3px;
+  }
+  .doodle {
+    position: absolute;
+    transform: rotate(var(--r));
+  }
+  .search input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--ink);
+    outline: none;
+  }
+  .search:focus-within {
+    box-shadow: 3px 4px 0 var(--accent);
+  }
+  .pen-dot {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--ink);
+    border-radius: 50% 45% 55% 50%;
+    background: var(--icon-color);
+  }
+  #pen:not(.hidden) {
+    display: flex;
+  }
+  .icon-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
+    gap: 18px 16px;
+  }
+  .cell {
+    position: relative;
+  }
+  .cell[hidden] {
+    display: none;
+  }
+  .tile {
+    display: flex;
+    aspect-ratio: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .cell:nth-child(3n + 1) .tile {
+    transform: rotate(-1.6deg);
+  }
+  .cell:nth-child(4n + 2) .tile {
+    transform: rotate(1.8deg);
+  }
+  .cell:nth-child(5n + 3) .tile {
+    transform: rotate(-0.8deg);
+  }
+  .cell:nth-child(7n) .tile {
+    transform: rotate(2.4deg);
+  }
+  .cell .tile:hover,
+  .cell .tile:focus-visible {
+    transform: rotate(0) translateY(-3px);
+    box-shadow: 4px 6px 0 var(--accent);
+  }
+  .name {
+    font-family: var(--font-hand);
+    font-size: 1.05rem;
+    line-height: 1.15;
+    max-width: 100%;
+    padding: 0 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .qc {
+    position: absolute;
+    top: -8px;
+    right: -6px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    color: var(--ink);
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.8) rotate(8deg);
+    transition: opacity 0.12s ease, transform 0.12s ease;
+  }
+  .cell:hover .qc,
+  .cell:focus-within .qc {
+    opacity: 1;
+    transform: scale(1) rotate(4deg);
+  }
+  .qc:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  @media (hover: none) {
+    .qc {
+      opacity: 1;
+      transform: scale(0.9) rotate(4deg);
+    }
+  }
+  #empty:not(.hidden) {
+    display: flex;
+  }
+</style>
+
+<script>
+  import { searchIcons } from "../lib/search";
+  import { DEFAULTS, loadSettings, saveSettings } from "../lib/settings";
+  import { snippet } from "../lib/snippets";
+  import { copyText } from "../lib/copy";
+  import { toast } from "../lib/toast";
+
+  const grid = document.getElementById("grid")!;
+  const input = document.getElementById("q") as HTMLInputElement;
+  const count = document.getElementById("count")!;
+  const empty = document.getElementById("empty")!;
+  const emptyQ = document.getElementById("empty-q")!;
+  const chips = [...document.querySelectorAll<HTMLButtonElement>("[data-group]").values()].filter((el) => el.tagName === "BUTTON");
+  const cells = [...grid.querySelectorAll<HTMLLIElement>(".cell")];
+  const items = cells.map((el, k) => ({
+    el,
+    k,
+    name: el.dataset.name!,
+    group: el.dataset.group!,
+    tags: el.dataset.tags ? el.dataset.tags.split("|") : [],
+  }));
+
+  const params = new URLSearchParams(location.search);
+  let query = params.get("q") ?? "";
+  let group = params.get("group") || null;
+  if (group && !items.some((i) => i.group === group)) group = null;
+  input.value = query;
+
+  let urlTimer: ReturnType<typeof setTimeout> | undefined;
+  const writeUrl = () => {
+    clearTimeout(urlTimer);
+    urlTimer = setTimeout(() => {
+      const p = new URLSearchParams();
+      if (query.trim()) p.set("q", query.trim());
+      if (group) p.set("group", group);
+      const s = p.toString();
+      history.replaceState(null, "", s ? `?${s}` : location.pathname);
+    }, 150);
+  };
+
+  const render = () => {
+    const hits = searchIcons(items, query, group);
+    const shown = new Set(hits);
+    const ordered = query.trim() ? [...hits, ...items.filter((i) => !shown.has(i))] : items;
+    for (const it of ordered) {
+      it.el.hidden = !shown.has(it);
+      grid.appendChild(it.el);
+    }
+    for (const c of chips) c.setAttribute("aria-pressed", String((c.dataset.group || null) === group));
+    count.textContent = hits.length === items.length ? `${hits.length} icons` : `${hits.length} of ${items.length} icons`;
+    empty.classList.toggle("hidden", hits.length > 0);
+    emptyQ.textContent = query.trim();
+    count.classList.toggle("invisible", hits.length === 0);
+  };
+
+  input.addEventListener("input", () => {
+    query = input.value;
+    render();
+    writeUrl();
+  });
+  for (const c of chips) {
+    c.addEventListener("click", () => {
+      group = c.dataset.group || null;
+      render();
+      writeUrl();
+    });
+  }
+
+  document.addEventListener("keydown", (e) => {
+    const t = e.target as HTMLElement;
+    const typing = t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable;
+    if ((e.key === "/" && !typing) || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k")) {
+      e.preventDefault();
+      input.focus();
+      input.select();
+    }
+    if (e.key === "Escape" && t === input && input.value) {
+      input.value = "";
+      query = "";
+      render();
+      writeUrl();
+    }
+  });
+
+  const pen = document.getElementById("pen")!;
+  const penText = document.getElementById("pen-text")!;
+  const applyPen = () => {
+    const s = loadSettings();
+    const root = document.documentElement.style;
+    if (s.color !== DEFAULTS.color) root.setProperty("--icon-color", s.color);
+    else root.removeProperty("--icon-color");
+    root.setProperty("--icon-stroke", String(s.stroke));
+    const custom = s.color !== DEFAULTS.color || s.stroke !== DEFAULTS.stroke;
+    pen.classList.toggle("hidden", !custom);
+    penText.textContent = `drawing with ${s.color === DEFAULTS.color ? "ink" : s.color}, stroke ${s.stroke}`;
+  };
+  document.getElementById("pen-reset")!.addEventListener("click", () => {
+    saveSettings({ ...DEFAULTS });
+    applyPen();
+  });
+
+  grid.addEventListener("click", async (e) => {
+    const btn = (e.target as HTMLElement).closest(".qc");
+    if (!btn) return;
+    const cell = btn.closest<HTMLLIElement>(".cell")!;
+    const d = cell.querySelector(".tile path")!.getAttribute("d")!;
+    const name = cell.dataset.name!;
+    const s = loadSettings();
+    const ok = await copyText(snippet("svg", { name, d }, { ...s, size: 24 }));
+    toast(ok ? `copied ${name}` : "couldn't copy. Open the icon and select the code instead.");
+  });
+
+  applyPen();
+  render();
+</script>

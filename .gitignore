@@ -1,0 +1,8 @@
+node_modules/
+packages/icons/dist/
+site/dist/
+site/.astro/
+site/public/sprite.svg
+site/public/svg/
+.wrangler/
+.DS_Store

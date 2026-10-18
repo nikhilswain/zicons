@@ -1,0 +1,17 @@
+---
+import Base from "../layouts/Base.astro";
+import Wobbly from "../components/Wobbly.astro";
+import license from "../../../LICENSE?raw";
+---
+
+<Base title="License · zicons" description="zicons is MIT licensed. Use the icons anywhere, including commercial work.">
+  <article class="prose-sk pt-10">
+    <span class="tape">the fine print</span>
+    <Wobbly text="MIT license" tag="h1" class="mt-4 text-[clamp(2.6rem,7vw,4.6rem)]" />
+    <p class="mt-6">
+      Use the icons in personal and commercial work, change them, ship them in your own products. Keep the copyright
+      notice with the files.
+    </p>
+    <pre class="code mt-8 whitespace-pre-wrap">{license}</pre>
+  </article>
+</Base>

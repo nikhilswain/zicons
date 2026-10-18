@@ -1,0 +1,32 @@
+{
+  "name": "site",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "prebuild": "node scripts/copy-icons.mjs",
+    "predev": "node scripts/copy-icons.mjs",
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.1.0",
+    "@astrojs/sitemap": "^3.7.4",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3",
+    "zicons": "*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "wrangler": "^4.151.1"
+  },
+  "private": true
+}

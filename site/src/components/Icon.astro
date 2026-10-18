@@ -1,0 +1,29 @@
+---
+import { getIcon } from "../data/icons";
+
+interface Props {
+  name: string;
+  size?: number | string;
+  class?: string;
+  boil?: "sm" | "big" | false;
+  plain?: boolean;
+  style?: string;
+}
+
+const { name, size = 24, class: cls = "", boil = false, plain = false, style } = Astro.props;
+const icon = getIcon(name);
+const boilClass = boil === "sm" ? "zi-boil-sm" : boil === "big" ? "zi-boil" : "";
+---
+
+<svg
+  class:list={[plain ? "zi-plain" : "zi", boilClass, cls]}
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2.2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  style={style}><path d={icon.d}></path></svg>

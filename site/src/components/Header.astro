@@ -1,0 +1,96 @@
+---
+import Icon from "./Icon.astro";
+
+const path = Astro.url.pathname.replace(/(index)?\.html$/, "") || "/";
+const links = [
+  { href: "/", label: "icons", active: path === "/" || path.startsWith("/icons") },
+  { href: "/story", label: "story", active: path.startsWith("/story") },
+  { href: "/use", label: "use", active: path.startsWith("/use") },
+];
+---
+
+<header class="mx-auto flex max-w-[1240px] flex-wrap items-center gap-x-6 gap-y-3 px-4 pt-5 pb-2 sm:px-6">
+  <a href="/" class="logo flex items-center gap-2 no-underline" aria-label="zicons home">
+    <Icon name="brush" size={26} plain boil="sm" />
+    <span class="text-2xl font-extrabold">zicons</span>
+  </a>
+  <nav class="flex gap-1" aria-label="Main">
+    {
+      links.map((l) => (
+        <a href={l.href} class:list={["navlink", { on: l.active }]} aria-current={l.active ? "page" : undefined}>
+          {l.label}
+        </a>
+      ))
+    }
+  </nav>
+  <div class="ml-auto flex items-center gap-2">
+    <button type="button" class="chip sk" id="boil-toggle" aria-pressed="true" title="Turn the line boil on or off">
+      <Icon name="sparkle" size={16} plain />
+      <span>boil</span>
+    </button>
+    <button type="button" class="chip sk" id="theme-toggle" aria-label="Switch to night paper" title="Day or night paper">
+      <span class="theme-sun"><Icon name="sun" size={16} plain /></span>
+      <span class="theme-moon"><Icon name="moon" size={16} plain /></span>
+    </button>
+  </div>
+</header>
+
+<style>
+  .logo span {
+    font-variation-settings: "BNCE" 90, "INFM" 100;
+  }
+  .navlink {
+    font-family: var(--font-hand);
+    font-size: 1.45rem;
+    padding: 0 10px;
+    text-decoration: none;
+    border-radius: 10px;
+    position: relative;
+  }
+  .navlink.on::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    right: 6px;
+    bottom: 2px;
+    height: 7px;
+    background: var(--accent);
+    opacity: 0.45;
+    border-radius: 4px 8px 3px 6px;
+    transform: rotate(-1.5deg);
+    z-index: -1;
+  }
+  .navlink:hover {
+    color: var(--accent-ink);
+  }
+  :global(html[data-theme="dark"]) .theme-sun,
+  :global(html[data-theme="light"]) .theme-moon {
+    display: none;
+  }
+</style>
+
+<script>
+  const root = document.documentElement;
+  const boil = document.getElementById("boil-toggle")!;
+  const theme = document.getElementById("theme-toggle")!;
+  const save = (k: string, v: string) => {
+    try {
+      localStorage.setItem(k, v);
+    } catch {}
+  };
+  const sync = () => {
+    boil.setAttribute("aria-pressed", String(root.dataset.boil !== "off"));
+    theme.setAttribute("aria-label", root.dataset.theme === "dark" ? "Switch to day paper" : "Switch to night paper");
+  };
+  boil.addEventListener("click", () => {
+    root.dataset.boil = root.dataset.boil === "off" ? "on" : "off";
+    save("zicons:boil", root.dataset.boil);
+    sync();
+  });
+  theme.addEventListener("click", () => {
+    root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
+    save("zicons:theme", root.dataset.theme);
+    sync();
+  });
+  sync();
+</script>

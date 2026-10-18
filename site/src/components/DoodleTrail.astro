@@ -1,0 +1,159 @@
+---
+import Icon from "./Icon.astro";
+import { neighbours, trail } from "../data/icons";
+
+interface Props {
+  name: string;
+}
+
+const { name } = Astro.props;
+const stops = trail(name);
+const { prev, next } = neighbours(name);
+---
+
+<section class="trail-wrap" aria-label="Related icons">
+  <h2 class="hand trail-title">keep wandering</h2>
+  <div class="trail">
+    <svg class="trail-line" viewBox="0 0 1000 100" preserveAspectRatio="none" aria-hidden="true">
+      <path
+        class="zi-boil"
+        d="M20 50 C 110 0, 170 100, 260 50 S 410 0, 500 50 S 650 100, 740 50 S 890 0, 980 50"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-dasharray="1 9"
+        stroke-linecap="round"
+        vector-effect="non-scaling-stroke"></path>
+    </svg>
+    <ol class="stops">
+      {
+        stops.map((i) => (
+          <li class:list={["stop", { here: i.name === name }]}>
+            {i.name === name ? (
+              <span class="dot card" aria-current="page">
+                <Icon name={i.name} size={26} plain boil="sm" />
+              </span>
+            ) : (
+              <a class="dot card" href={`/icons/${i.name}`} aria-label={i.name}>
+                <Icon name={i.name} size={24} plain boil="sm" />
+              </a>
+            )}
+            <span class="hand stop-name">{i.name}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+  <nav class="flips" aria-label="Previous and next icon">
+    <a class="btn sk" href={`/icons/${prev.name}`} rel="prev" data-flip="prev">
+      <Icon name="arrow-left" size={18} plain />
+      {prev.name}
+    </a>
+    <span class="hand flip-hint">← → keys flip pages</span>
+    <a class="btn sk" href={`/icons/${next.name}`} rel="next" data-flip="next">
+      {next.name}
+      <Icon name="arrow-right" size={18} plain />
+    </a>
+  </nav>
+</section>
+
+<style>
+  .trail-wrap {
+    margin-top: 56px;
+  }
+  .trail-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+  .trail {
+    position: relative;
+    padding: 8px 0;
+    overflow-x: auto;
+  }
+  .trail-line {
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 100%;
+    min-width: 560px;
+    height: 70px;
+    color: var(--ink);
+    opacity: 0.7;
+  }
+  .stops {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    min-width: 560px;
+  }
+  .stop {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 80px;
+  }
+  .stop:nth-child(even) {
+    margin-top: 22px;
+  }
+  .dot {
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    border-radius: 50% 46% 52% 48%;
+    color: var(--ink);
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+  a.dot:hover,
+  a.dot:focus-visible {
+    transform: rotate(-6deg) scale(1.08);
+    box-shadow: 3px 4px 0 var(--accent);
+  }
+  .here .dot {
+    width: 68px;
+    height: 68px;
+    background: var(--accent);
+    color: #fff;
+  }
+  .stop-name {
+    font-size: 1.15rem;
+    line-height: 1;
+  }
+  .here .stop-name {
+    font-weight: 700;
+  }
+  .flips {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  .flip-hint {
+    font-size: 1.15rem;
+    opacity: 0.6;
+  }
+  @media (max-width: 640px) {
+    .flip-hint {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("keydown", (e) => {
+    if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const t = e.target as HTMLElement;
+    if (t !== document.body && !(t.tagName === "A" && t.closest(".trail-wrap"))) return;
+    const dir = e.key === "ArrowLeft" ? "prev" : e.key === "ArrowRight" ? "next" : null;
+    if (!dir) return;
+    const link = document.querySelector<HTMLAnchorElement>(`[data-flip="${dir}"]`);
+    if (link) location.href = link.href;
+  });
+</script>

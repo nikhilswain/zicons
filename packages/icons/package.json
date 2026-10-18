@@ -1,0 +1,22 @@
+{
+  "name": "zicons",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A brush-drawn icon set: one even line with generously rounded corners.",
+  "license": "MIT",
+  "author": "zero (https://zerro.dev)",
+  "type": "module",
+  "exports": {
+    "./icons.json": "./dist/icons.json",
+    "./sprite.svg": "./sprite.svg",
+    "./svg/*": "./svg/*"
+  },
+  "files": [
+    "dist",
+    "svg",
+    "sprite.svg"
+  ],
+  "scripts": {
+    "build": "node build.mjs"
+  }
+}

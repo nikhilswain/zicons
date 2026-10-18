@@ -1,0 +1,35 @@
+---
+import Base from "../../layouts/Base.astro";
+import Workbench from "../../components/Workbench.tsx";
+import DoodleTrail from "../../components/DoodleTrail.astro";
+import { getIcon, icons, type Icon } from "../../data/icons";
+import "../../styles/workbench.css";
+
+export function getStaticPaths() {
+  return icons.map((icon, index) => ({ params: { name: icon.name }, props: { icon, index } }));
+}
+
+interface Props {
+  icon: Icon;
+  index: number;
+}
+
+const { icon, index } = Astro.props;
+const action = icon.name.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+const ui = {
+  back: "← all icons",
+  action,
+  bar: ["pencil", "eraser", "palette"].filter((n) => n !== icon.name).slice(0, 2).map((n) => getIcon(n).d),
+  copy: getIcon("copy").d,
+  download: getIcon("download").d,
+  link: getIcon("link").d,
+};
+const description = `The ${icon.name} icon from zicons, brush-drawn. ${icon.groupTitle} group${icon.tags.length ? `, for ${icon.tags.slice(0, 4).join(", ")}` : ""}. Copy it as SVG, HTML, React, Vue or Svelte, or download SVG and PNG.`;
+---
+
+<Base title={`${icon.name} icon · zicons`} description={description} wide>
+  <div class="desk">
+    <Workbench client:load icon={icon} index={index} total={icons.length} ui={ui} />
+  </div>
+  <DoodleTrail name={icon.name} />
+</Base>
