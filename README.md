@@ -9,7 +9,7 @@ Browse, restyle and copy them at **[zicons.zerro.dev](https://zicons.zerro.dev)*
 
 - **Inline SVG:** copy an icon from the site and paste it into your HTML. It takes the text colour.
 - **Sprite:** host `sprite.svg` yourself and write
-  `<svg width="24" height="24" stroke-width="2.2"><use href="/sprite.svg#pencil" /></svg>`.
+  `<svg width="24" height="24" stroke-width="1.6"><use href="/sprite.svg#pencil" /></svg>`.
 - **Image:** `<img src="https://zicons.zerro.dev/svg/pencil.svg">`. Images draw in black, because
   `currentColor` only works inline.
 - **Frameworks:** every icon page has React, Vue and Svelte versions you can copy as a component.

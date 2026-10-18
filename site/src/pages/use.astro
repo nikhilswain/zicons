@@ -6,11 +6,12 @@ import { SITE } from "../config";
 import { getIcon } from "../data/icons";
 import { DEFAULTS } from "../lib/settings";
 import { snippet } from "../lib/snippets";
+import { highlightHtml } from "../lib/highlight";
 
 const heart = getIcon("heart");
 const inline = snippet("svg", heart, DEFAULTS).replace(/d="[^"]+"/, 'd="M12.16 19.38Q11.91 19.43…"');
 const sprite = `<svg width="24" height="24" fill="none" stroke="currentColor"
-     stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+     stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
   <use href="/sprite.svg#heart" />
 </svg>`;
 const img = `<img src="/svg/heart.svg" width="24" height="24" alt="Favourite" />`;
@@ -39,16 +40,29 @@ const wobbleManual = `<script src="${SITE.url}/wobble/v1.js" data-manual></scrip
       Paste the SVG straight into your HTML. With the default <code>stroke="currentColor"</code> the icon takes the
       colour of the text around it, so <code>color: tomato</code> on a parent turns it tomato.
     </p>
-    <pre class="code">{inline}</pre>
+    <pre class="code" set:html={highlightHtml(inline)} />
 
-    <h2>The sprite</h2>
+    <h2 id="sprite">The sprite</h2>
     <p>
-      <a href="/sprite.svg" download>sprite.svg</a> holds every icon as a <code>&lt;symbol&gt;</code>. Point a
-      <code>&lt;use&gt;</code> at it and set the stroke on the outer <code>&lt;svg&gt;</code>, since the symbols leave
-      the stroke width to you. Host the sprite on your own site: browsers block <code>&lt;use&gt;</code> from pulling a
-      file off another domain.
+      Most people never need this. Inline SVG or a framework component is simpler, and that's what the icon pages give
+      you. The sprite pays off when one plain HTML page shows a lot of icons, like a toolbar, a long menu or a
+      dashboard. The browser downloads every icon once as one small file and caches it, and each icon in your markup
+      shrinks to a single <code>&lt;use&gt;</code> line instead of a full path.
     </p>
-    <pre class="code">{sprite}</pre>
+    <p>
+      <code>sprite.svg</code> holds every icon as a <code>&lt;symbol&gt;</code>. Point a <code>&lt;use&gt;</code> at
+      the icon you want and set the stroke on the outer <code>&lt;svg&gt;</code>, since the symbols leave the stroke
+      width to you. Host the file on your own site: browsers block <code>&lt;use&gt;</code> from pulling it off another
+      domain.
+    </p>
+    <pre class="code" set:html={highlightHtml(sprite)} />
+    <p class="sprite-get">
+      <a class="btn sk btn-ink" href="/sprite.svg" download>
+        <Icon name="download" size={18} plain />
+        Download sprite.svg
+      </a>
+      <span class="hand text-xl">opened on its own it looks blank. Symbols only draw when a page uses them.</span>
+    </p>
 
     <h2>As an image</h2>
     <p>
@@ -56,20 +70,20 @@ const wobbleManual = `<script src="${SITE.url}/wobble/v1.js" data-manual></scrip
       An <code>&lt;img&gt;</code> draws it in black: <code>currentColor</code> only works when the SVG is inline. To get
       another colour, copy the icon with that colour from its page, or download it as SVG or PNG.
     </p>
-    <pre class="code">{img}</pre>
+    <pre class="code" set:html={highlightHtml(img)} />
 
     <h2 id="wobble">The wobble</h2>
-    <p class="flex items-center gap-3">
-      <Icon name="sparkle" size={22} plain boil="sm" />
+    <p>
+      <Icon name="sparkle" size={22} plain boil="sm" class="mr-1.5 inline align-[-4px]" />
       The shimmer you see on this site works on your pages too. Add the helper once, then give an icon <code>zi-boil-sm</code> (14–24 px) or a big drawing <code>zi-boil</code>.
     </p>
-    <pre class="code">{wobbleTag}</pre>
+    <pre class="code" set:html={highlightHtml(wobbleTag)} />
     <p>
       It runs for everyone by default. To pause it for people who ask their system to reduce motion, add one attribute:
     </p>
-    <pre class="code">{wobbleOpts}</pre>
+    <pre class="code" set:html={highlightHtml(wobbleOpts)} />
     <p>Or start it yourself:</p>
-    <pre class="code">{wobbleManual}</pre>
+    <pre class="code" set:html={highlightHtml(wobbleManual)} />
     <p>
       Rather not load a script? The <strong>+ wobble</strong> tab on every icon page gives you the filter and the CSS to
       paste in directly.
@@ -84,8 +98,15 @@ const wobbleManual = `<script src="${SITE.url}/wobble/v1.js" data-manual></scrip
 </Base>
 
 <style>
+  .sprite-get {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-top: 16px;
+  }
   .code {
-    margin: 14px 0 0;
+    margin: 14px 0 18px;
     white-space: pre-wrap;
     word-break: break-word;
   }

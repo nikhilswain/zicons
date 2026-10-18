@@ -16,7 +16,7 @@ This folder is self-contained; it can be copied anywhere and used on its own.
 ## Style
 
 - 24 x 24 grid, drawing kept roughly inside 3..21.
-- Stroke 2.2, round caps and joins, no fill, colour from `currentColor`.
+- Stroke 1.6, round caps and joins, no fill, colour from `currentColor`.
 - One even line weight. Straight edges bow very slightly; the bow is seeded from the icon name,
   so every build draws the same line.
 - Rounded corners wherever a shape has one; no sharp points.
@@ -29,7 +29,7 @@ on the outer `<svg>`:
 
 ```html
 <span style="color:#FF6B5B">
-  <svg width="18" height="18" stroke-width="2.2"><use href="sprite.svg#pencil" /></svg>
+  <svg width="18" height="18" stroke-width="1.6"><use href="sprite.svg#pencil" /></svg>
 </span>
 ```
 

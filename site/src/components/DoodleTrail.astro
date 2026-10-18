@@ -27,14 +27,14 @@ const { prev, next } = neighbours(name);
     </svg>
     <ol class="stops">
       {
-        stops.map((i) => (
+        stops.map((i, k) => (
           <li class:list={["stop", { here: i.name === name }]}>
             {i.name === name ? (
               <span class="dot card" aria-current="page">
                 <Icon name={i.name} size={26} plain boil="sm" />
               </span>
             ) : (
-              <a class="dot card" href={`/icons/${i.name}`} aria-label={i.name}>
+              <a class="dot card" href={`/icons/${i.name}`} aria-label={i.name} data-dir={k < stops.length / 2 ? "prev" : "next"}>
                 <Icon name={i.name} size={24} plain boil="sm" />
               </a>
             )}
@@ -45,12 +45,12 @@ const { prev, next } = neighbours(name);
     </ol>
   </div>
   <nav class="flips" aria-label="Previous and next icon">
-    <a class="btn sk" href={`/icons/${prev.name}`} rel="prev" data-flip="prev">
+    <a class="btn sk" href={`/icons/${prev.name}`} rel="prev" data-flip="prev" data-dir="prev" data-astro-prefetch="load">
       <Icon name="arrow-left" size={18} plain />
       {prev.name}
     </a>
     <span class="hand flip-hint">← → keys flip pages</span>
-    <a class="btn sk" href={`/icons/${next.name}`} rel="next" data-flip="next">
+    <a class="btn sk" href={`/icons/${next.name}`} rel="next" data-flip="next" data-dir="next" data-astro-prefetch="load">
       {next.name}
       <Icon name="arrow-right" size={18} plain />
     </a>
@@ -147,6 +147,44 @@ const { prev, next } = neighbours(name);
 </style>
 
 <script>
+  let flipping = false;
+  const flip = (href: string, dir: string) => {
+    if (flipping) return;
+    flipping = true;
+    try {
+      sessionStorage.setItem("zicons:flip", dir);
+    } catch {}
+    const go = () => location.assign(href);
+    if (scrollY < 4) return go();
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      scrollTo(0, 0);
+      return go();
+    }
+    const from = scrollY;
+    const time = Math.min(280, 120 + from * 0.2);
+    const start = performance.now();
+    let sent = false;
+    const step = (now: number) => {
+      const p = Math.min(1, (now - start) / time);
+      scrollTo(0, from * (1 - p) ** 3);
+      if (!sent && p >= 0.8) {
+        sent = true;
+        go();
+      }
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  };
+  addEventListener("pageshow", () => {
+    flipping = false;
+  });
+  document.addEventListener("click", (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const link = (e.target as HTMLElement).closest<HTMLAnchorElement>("a[data-dir]");
+    if (!link) return;
+    e.preventDefault();
+    flip(link.href, link.dataset.dir!);
+  });
   document.addEventListener("keydown", (e) => {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     const t = e.target as HTMLElement;
@@ -154,6 +192,8 @@ const { prev, next } = neighbours(name);
     const dir = e.key === "ArrowLeft" ? "prev" : e.key === "ArrowRight" ? "next" : null;
     if (!dir) return;
     const link = document.querySelector<HTMLAnchorElement>(`[data-flip="${dir}"]`);
-    if (link) location.href = link.href;
+    if (!link) return;
+    e.preventDefault();
+    flip(link.href, dir);
   });
 </script>

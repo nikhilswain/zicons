@@ -39,12 +39,24 @@ const canonical = new URL(path, SITE.url).href;
         try {
           theme = localStorage.getItem("zicons:theme");
           boil = localStorage.getItem("zicons:boil");
+          var pen = JSON.parse(localStorage.getItem("zicons:settings") || "null");
+          if (pen && (pen.color !== "currentColor" || pen.size !== 24 || pen.stroke !== 1.6)) d.dataset.pen = "custom";
+          if (/[?&](color|size|stroke)=/.test(location.search)) d.dataset.pen = "custom";
         } catch (e) {}
         if (theme !== "light" && theme !== "dark") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         d.dataset.theme = theme;
         d.dataset.boil = boil === "off" ? "off" : "on";
+        window.addEventListener("pagereveal", function (e) {
+          var dir = null;
+          try {
+            dir = sessionStorage.getItem("zicons:flip");
+            sessionStorage.removeItem("zicons:flip");
+          } catch (err) {}
+          if (e.viewTransition && (dir === "next" || dir === "prev")) e.viewTransition.types.add(dir);
+        });
       })();
     </script>
+    <link rel="expect" href="#site-footer" blocking="render" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

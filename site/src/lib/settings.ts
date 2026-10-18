@@ -1,6 +1,6 @@
 export type Settings = { color: string; size: number; stroke: number; boil: boolean };
 
-export const DEFAULTS: Settings = { color: "currentColor", size: 24, stroke: 2.2, boil: true };
+export const DEFAULTS: Settings = { color: "currentColor", size: 24, stroke: 1.6, boil: true };
 
 const KEY = "zicons:settings";
 const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));

@@ -28,7 +28,7 @@
   --code-bg: #1d1b18;
   --code-ink: #ecebe7;
   --icon-color: currentColor;
-  --icon-stroke: 2.2;
+  --icon-stroke: 1.6;
   color-scheme: light;
 }
 
@@ -66,6 +66,18 @@ body {
 
 a {
   color: inherit;
+}
+
+:where(main, footer) :where(p, li) a:not([class]) {
+  text-decoration: underline wavy color-mix(in srgb, var(--accent) 80%, transparent);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 4px;
+  text-decoration-skip-ink: none;
+}
+
+:where(main, footer) :where(p, li) a:not([class]):hover {
+  color: var(--accent-ink);
+  text-decoration-color: var(--accent-ink);
 }
 
 :focus-visible {
@@ -200,10 +212,38 @@ html[data-boil="off"] .wob {
   tab-size: 2;
 }
 
+.tk-tag {
+  color: #ff8f80;
+}
+
+.tk-attr {
+  color: #ffd966;
+}
+
+.tk-str {
+  color: #9fe0b0;
+}
+
+.tk-kw {
+  color: #c4b2ff;
+}
+
+.tk-num {
+  color: #8fc7ff;
+}
+
+.tk-punct {
+  color: #ecebe78c;
+}
+
 .prose-sk p,
 .prose-sk li {
   line-height: 1.7;
   max-width: 68ch;
+}
+
+.prose-sk p + p {
+  margin-top: 0.9rem;
 }
 
 .prose-sk h2 {
@@ -220,4 +260,14 @@ html[data-boil="off"] .wob {
   border: 1.5px solid var(--ink);
   border-radius: 6px;
   padding: 0 5px;
+  white-space: nowrap;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.2s;
 }

@@ -19,19 +19,26 @@ const seeds = ["square", "square-2", "square-3"].map((seed) => ({
     <span class="tape">the story</span>
     <Wobbly text="from zketch, with love" tag="h1" class="mt-4 text-[clamp(2.6rem,7vw,4.6rem)]" />
 
-    <div class="placeholder card mt-10">
-      <span class="tape pin">zero: write the zketch story here</span>
-      <p class="hand text-2xl">A few lines in your own words, for example:</p>
-      <ul class="hand text-xl">
-        <li>why Zketch needed its own icons instead of an off-the-shelf set</li>
-        <li>how you made them, and what you wanted them to feel like</li>
-        <li>what you hope people make with them</li>
-      </ul>
+    <div class="tale mt-10">
+      <p>
+        I've always doodled. In notebook margins, on the backs of receipts, through meetings I probably should've been
+        listening in. So I built <a href={SITE.zketch}>Zketch</a>, a place to doodle on purpose. Then, naturally, I filled
+        every button in it with borrowed icons drawn with a ruler. A doodle app with ruler-straight buttons. Very on brand.
+      </p>
+      <p>
+        So I sat down and sketched my own. Plenty of character, and not one the same size as the next. Charming on paper.
+        Less charming as a button you're trying to click.
+      </p>
+      <p>
+        I did the sensible thing and made Zketch draw them for me. A small pipeline now draws every icon the way Zketch's
+        pen moves: one steady line, a gentle bow, soft round ends, all on the same 24-pixel grid. They still look like
+        someone drew them. They're always crisp.
+      </p>
+      <p>
+        {icons.length} so far. If they make something of yours feel a little more human, that was the whole point.
+      </p>
+      <p class="hand sign">zero</p>
     </div>
-
-    <p class="mt-10">
-      zicons is the icon set from <a href={SITE.zketch}>Zketch</a>, the drawing app. There are {icons.length} of them so far.
-    </p>
 
     <h2>How they're drawn</h2>
     <p>
@@ -53,7 +60,7 @@ const seeds = ["square", "square-2", "square-3"].map((seed) => ({
       </figure>
       <ul class="rule-list">
         <li><strong>A 24 by 24 grid.</strong> The drawing stays roughly inside 3..21, so icons line up at any size.</li>
-        <li><strong>One even line, 2.2 wide.</strong> Round caps, round joins, no fills. Colour comes from the text around it.</li>
+        <li><strong>One even line, 1.6 wide.</strong> Round caps, round joins, no fills. Colour comes from the text around it.</li>
         <li><strong>Rounded corners everywhere.</strong> Nothing ends in a sharp point; a pen doesn't either.</li>
         <li><strong>Few strokes.</strong> Each stroke is one pen movement, and most icons need two or three.</li>
       </ul>
@@ -67,7 +74,7 @@ const seeds = ["square", "square-2", "square-3"].map((seed) => ({
     <div class="seeds mt-6">
       {seeds.map((s) => (
         <figure class="card">
-          <svg viewBox="0 0 24 24" width="96" height="96" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="96" height="96" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d={s.d} />
           </svg>
           <figcaption class="hand">seed “{s.seed}”</figcaption>
@@ -95,20 +102,14 @@ const seeds = ["square", "square-2", "square-3"].map((seed) => ({
 </Base>
 
 <style>
-  .placeholder {
-    position: relative;
-    padding: 30px 26px 18px;
-    background: repeating-linear-gradient(-45deg, transparent 0 12px, #ffd9661f 12px 24px), var(--card);
-    border-style: dashed;
+  .tale p {
+    font-size: 1.12rem;
   }
-  .pin {
-    position: absolute;
-    top: -16px;
-    left: 22px;
-  }
-  .placeholder ul {
-    margin: 6px 0 0;
-    padding-left: 22px;
+  .tale .sign {
+    margin-top: 1.2rem;
+    font-size: 2rem;
+    transform: rotate(-3deg);
+    transform-origin: left;
   }
   .rules {
     display: grid;
@@ -139,7 +140,7 @@ const seeds = ["square", "square-2", "square-3"].map((seed) => ({
   .board-icon {
     fill: none;
     stroke: currentColor;
-    stroke-width: 2.2;
+    stroke-width: 1.6;
     stroke-linecap: round;
     stroke-linejoin: round;
   }

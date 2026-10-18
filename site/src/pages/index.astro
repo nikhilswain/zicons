@@ -68,7 +68,7 @@ const doodles = [
       {icons.map((i) => (
         <li class="cell" data-name={i.name} data-group={i.group} data-tags={i.tags.join("|")}>
           <a href={`/icons/${i.name}`} class="tile card">
-            <Icon name={i.name} size={30} boil="sm" />
+            <Icon name={i.name} size={30} />
             <span class="name">{i.name}</span>
           </a>
           <button type="button" class="qc sk" aria-label={`Copy ${i.name} SVG`} title="Copy SVG">
@@ -79,8 +79,9 @@ const doodles = [
     </ul>
     <div id="empty" class="hidden flex-col items-center py-20 text-center">
       <Icon name="eraser" size={64} plain boil="big" />
-      <p class="hand mt-4 text-3xl">nothing in the sketchbook for “<span id="empty-q"></span>”</p>
-      <p class="mt-2 text-ink-soft">Try a simpler word, like arrow, file or paint.</p>
+      <p class="hand mt-4 text-3xl">nothing <span id="empty-where">in the sketchbook</span> for “<span id="empty-q"></span>”</p>
+      <p id="empty-tip" class="mt-2 text-ink-soft">Try a simpler word, like arrow, file or paint.</p>
+      <button type="button" id="empty-all" class="btn sk btn-ink mt-5 hidden">Search all groups</button>
     </div>
   </section>
 </Base>
@@ -162,6 +163,13 @@ const doodles = [
     transform: rotate(0) translateY(-3px);
     box-shadow: 4px 6px 0 var(--accent);
   }
+  .tile:hover :global(svg),
+  .tile:focus-visible :global(svg) {
+    animation: zi-boil-sm 0.36s steps(1) infinite;
+  }
+  :global(html[data-boil="off"]) .tile :global(svg) {
+    animation: none;
+  }
   .name {
     font-family: var(--font-hand);
     font-size: 1.05rem;
@@ -219,6 +227,9 @@ const doodles = [
   const count = document.getElementById("count")!;
   const empty = document.getElementById("empty")!;
   const emptyQ = document.getElementById("empty-q")!;
+  const emptyWhere = document.getElementById("empty-where")!;
+  const emptyTip = document.getElementById("empty-tip")!;
+  const emptyAll = document.getElementById("empty-all")!;
   const chips = [...document.querySelectorAll<HTMLButtonElement>("[data-group]").values()].filter((el) => el.tagName === "BUTTON");
   const cells = [...grid.querySelectorAll<HTMLLIElement>(".cell")];
   const items = cells.map((el, k) => ({
@@ -259,11 +270,23 @@ const doodles = [
     count.textContent = hits.length === items.length ? `${hits.length} icons` : `${hits.length} of ${items.length} icons`;
     empty.classList.toggle("hidden", hits.length > 0);
     emptyQ.textContent = query.trim();
+    const groupChip = chips.find((c) => c.dataset.group === group);
+    const elsewhere = group ? searchIcons(items, query, null).length : 0;
+    emptyWhere.textContent = groupChip ? `in ${groupChip.firstChild?.textContent?.trim()}` : "in the sketchbook";
+    emptyTip.textContent = elsewhere
+      ? `${elsewhere} ${elsewhere === 1 ? "icon matches" : "icons match"} in other groups.`
+      : "Try a simpler word, like arrow, file or paint.";
+    emptyAll.classList.toggle("hidden", !elsewhere);
     count.classList.toggle("invisible", hits.length === 0);
   };
 
   input.addEventListener("input", () => {
     query = input.value;
+    render();
+    writeUrl();
+  });
+  emptyAll.addEventListener("click", () => {
+    group = null;
     render();
     writeUrl();
   });
