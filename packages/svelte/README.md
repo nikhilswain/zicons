@@ -52,9 +52,19 @@ icon still until the icon, or the link or button around it, is hovered or focuse
 carries its own tiny filter, so there is nothing to set up. Small icons get a gentle wobble, icons of
 32px and up a stronger one.
 
-The wobble ignores reduced-motion settings on purpose. To honour them, pass your own check:
+The wobble ignores reduced-motion settings on purpose. To honour them, pass your own check. Read the
+setting in an effect, so server-rendered pages hydrate cleanly:
 
 ```svelte
+<script>
+  import { SparkleIcon } from "zicons-svelte";
+
+  let calm = $state(false);
+  $effect(() => {
+    calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  });
+</script>
+
 <SparkleIcon boil={!calm} />
 ```
 

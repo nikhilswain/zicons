@@ -35,6 +35,25 @@ import end up in your bundle. `toSvg(icon, options)` returns the SVG as a string
 | `aria-label`          |                | Names the icon (`role="img"`). Without it the icon is `aria-hidden`. |
 | `attrs`               |                | Any other attributes for the `<svg>`, like `{ class: "icon" }`.     |
 
+## The wobble
+
+```js
+toSvg(sparkle, { boil: true });
+toSvg(pencil, { boil: "hover" });
+```
+
+`boil` makes the line shimmer like a cartoon being traced again frame by frame. `"hover"` keeps the
+icon still until the icon, or the link or button around it, is hovered or focused. Each wobbling icon
+carries its own tiny filter, so there is nothing to set up. Small icons get a gentle wobble, icons of
+32px and up a stronger one.
+
+The wobble ignores reduced-motion settings on purpose. To honour them, pass your own check:
+
+```js
+const calm = matchMedia("(prefers-reduced-motion: reduce)").matches;
+el.innerHTML = toSvg(sparkle, { boil: !calm });
+```
+
 ## Files
 
 - `zicons/svg/<name>.svg`: one standalone SVG per icon.

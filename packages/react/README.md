@@ -50,11 +50,17 @@ icon still until the icon, or the link or button around it, is hovered or focuse
 carries its own tiny filter, so there is nothing to set up. Small icons get a gentle wobble, icons of
 32px and up a stronger one.
 
-The wobble ignores reduced-motion settings on purpose. To honour them, pass your own check:
+The wobble ignores reduced-motion settings on purpose. To honour them, pass your own check. Read the
+setting after the first render, so server-rendered pages hydrate cleanly:
 
 ```jsx
-const calm = typeof window !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-<SparkleIcon boil={!calm} />
+import { useEffect, useState } from "react";
+
+function Sparkle() {
+  const [calm, setCalm] = useState(false);
+  useEffect(() => setCalm(matchMedia("(prefers-reduced-motion: reduce)").matches), []);
+  return <SparkleIcon boil={!calm} />;
+}
 ```
 
 ## License

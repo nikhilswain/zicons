@@ -41,4 +41,12 @@ describe("toSvg", () => {
   it("hover boil carries a scoped style", () => {
     expect(toSvg(pencil, { boil: "hover" })).toMatch(/<style>[^<]*\[data-zi="/);
   });
+  it("hover boil reacts only to interactive parents, not any tabindex container", () => {
+    const s = toSvg(pencil, { boil: "hover" });
+    expect(s).not.toContain("[tabindex]");
+    expect(s).toContain("a[href]");
+  });
+  it("toSvg ids never match the ids frameworks generate", () => {
+    expect(toSvg(pencil, { boil: true }).match(/data-zi="([^"]+)"/)[1]).toMatch(/^zit\d+$/);
+  });
 });

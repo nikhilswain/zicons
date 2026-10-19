@@ -18,6 +18,8 @@ export function numericSize(size) {
   return null;
 }
 
+const INTERACTIVE = "a[href],button,summary,label,[role=button],[role=link],[role=menuitem],[role=tab]";
+
 export const pixelSize = (size) => numericSize(size) ?? DEFAULTS.size;
 
 export function boilMode(boil) {
@@ -50,7 +52,7 @@ export function boilMarkup(id, boil, px) {
   const filter = `<filter id="${id}-f" filterUnits="userSpaceOnUse" x="-3" y="-3" width="30" height="30"><feTurbulence type="fractalNoise" baseFrequency="${round(v.freq / k)}" numOctaves="2" seed="${SEEDS[0]}"><animate attributeName="seed" values="${SEEDS.join(";")}" dur="${BOIL_RATE}s" calcMode="discrete" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" scale="${round(v.scale * k)}" xChannelSelector="R" yChannelSelector="G"/></filter>`;
   if (!boil.hover) return filter;
   const at = `[data-zi="${id}"]`;
-  return `${filter}<style>${at}:hover path,:is(a,button,[tabindex]):is(:hover,:focus-visible) ${at} path{filter:url(#${id}-f)}</style>`;
+  return `${filter}<style>${at}:hover path,:is(${INTERACTIVE}):is(:hover,:focus-visible) ${at} path{filter:url(#${id}-f)}</style>`;
 }
 
 export const boilPathFilter = (id, boil) => (boil && !boil.hover ? `url(#${id}-f)` : undefined);
@@ -62,7 +64,7 @@ let count = 0;
 export function toSvg(icon, options = {}) {
   const { size, color, strokeWidth, absoluteStrokeWidth, boil, id, attrs = {}, ...aria } = options;
   const r = resolveProps({ size, color, strokeWidth, absoluteStrokeWidth, boil, ...aria, ...attrs });
-  const zi = r.boil ? (id ? safeId(id) : safeId(`s${++count}`)) : null;
+  const zi = r.boil ? (id ? safeId(id) : safeId(`t${++count}`)) : null;
   const all = {
     xmlns: "http://www.w3.org/2000/svg",
     width: r.width,
