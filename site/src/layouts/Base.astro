@@ -10,11 +10,15 @@ interface Props {
   title: string;
   description: string;
   wide?: boolean;
+  image?: string;
+  imageAlt?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
-const { title, description, wide = false } = Astro.props;
+const { title, description, wide = false, image = "/og/default.png", imageAlt = "Brush-drawn zicons on sketchbook paper", jsonLd } = Astro.props;
 const path = Astro.url.pathname.replace(/(index)?\.html$/, "").replace(/(.)\/$/, "$1") || "/";
 const canonical = new URL(path, SITE.url).href;
+const ogImage = new URL(image, SITE.url).href;
 ---
 
 <!doctype html>
@@ -30,6 +34,16 @@ const canonical = new URL(path, SITE.url).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="zicons" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
     <meta name="theme-color" content="#f4efe3" />
     <script is:inline>
       (function () {
@@ -43,7 +57,7 @@ const canonical = new URL(path, SITE.url).href;
           if (pen && (pen.color !== "currentColor" || pen.size !== 24 || pen.stroke !== 1.6)) d.dataset.pen = "custom";
           if (/[?&](color|size|stroke)=/.test(location.search)) d.dataset.pen = "custom";
         } catch (e) {}
-        if (theme !== "light" && theme !== "dark") theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        if (theme !== "dark") theme = "light";
         d.dataset.theme = theme;
         d.dataset.boil = boil === "off" ? "off" : "on";
         window.addEventListener("pagereveal", function (e) {

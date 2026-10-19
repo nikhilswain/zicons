@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zicons.zerro.dev/sitemap-index.xml

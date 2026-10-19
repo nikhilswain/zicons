@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import Workbench from "../../components/Workbench.tsx";
 import DoodleTrail from "../../components/DoodleTrail.astro";
 import { getIcon, icons, type Icon } from "../../data/icons";
+import { SITE } from "../../config";
 import "../../styles/workbench.css";
 
 export function getStaticPaths() {
@@ -16,6 +17,10 @@ interface Props {
 
 const { icon, index } = Astro.props;
 const action = icon.name.replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase());
+const words = action.toLowerCase();
+const uses = icon.tags.length ? ` for ${icon.tags.slice(0, 3).join(", ")}` : "";
+const lede = `A brush-drawn ${words} icon${uses}. Free under MIT, as SVG or as a React, Vue or Svelte component.`;
+const description = `A free, brush-drawn ${words} icon${uses}. Copy it as SVG, or use it in React, Vue or Svelte with an optional wobble. MIT licensed.`;
 const ui = {
   back: "← all icons",
   action,
@@ -23,11 +28,46 @@ const ui = {
   copy: getIcon("copy").d,
   download: getIcon("download").d,
   link: getIcon("link").d,
+  lede,
 };
-const description = `The ${icon.name} icon from zicons, brush-drawn. ${icon.groupTitle} group${icon.tags.length ? `, for ${icon.tags.slice(0, 4).join(", ")}` : ""}. Copy it as SVG, HTML, React, Vue or Svelte, or download SVG and PNG.`;
+const page = `${SITE.url}/icons/${icon.name}`;
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "ImageObject",
+    name: `${action} icon`,
+    description,
+    url: page,
+    contentUrl: `${SITE.url}/svg/${icon.name}.svg`,
+    thumbnailUrl: `${SITE.url}/og/${icon.name}.png`,
+    encodingFormat: "image/svg+xml",
+    keywords: [words, ...icon.tags, "icon", "svg"].join(", "),
+    license: `${SITE.url}/license`,
+    acquireLicensePage: `${SITE.url}/license`,
+    creditText: "zicons",
+    copyrightNotice: "© 2026 Nikhil Kumar Swain (zero)",
+    creator: { "@type": "Person", name: SITE.author, url: SITE.authorUrl },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Icons", item: `${SITE.url}/` },
+      { "@type": "ListItem", position: 2, name: icon.groupTitle, item: `${SITE.url}/?group=${icon.group}` },
+      { "@type": "ListItem", position: 3, name: `${action} icon`, item: page },
+    ],
+  },
+];
 ---
 
-<Base title={`${icon.name} icon · zicons`} description={description} wide>
+<Base
+  title={`${action} icon: free SVG for React, Vue and Svelte · zicons`}
+  description={description}
+  image={`/og/${icon.name}.png`}
+  imageAlt={`The ${words} icon, brush-drawn on a sketchbook card`}
+  jsonLd={jsonLd}
+  wide
+>
   <div class="desk">
     <Workbench client:load icon={icon} index={index} total={icons.length} ui={ui} />
   </div>

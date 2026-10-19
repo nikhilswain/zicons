@@ -379,6 +379,14 @@
   overflow-wrap: anywhere;
 }
 
+.lede {
+  margin: 10px 0 0;
+  max-width: 46ch;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.75;
+}
+
 .tags {
   margin-top: 12px;
   gap: 8px;

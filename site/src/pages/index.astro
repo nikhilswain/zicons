@@ -16,8 +16,17 @@ const doodles = [
 ---
 
 <Base
-  title="zicons · brush-drawn icons"
-  description={`${icons.length} brush-drawn icons from Zketch. Browse, restyle and copy them as SVG, HTML, React, Vue or Svelte.`}
+  title="zicons: brush-drawn SVG icons for React, Vue and Svelte"
+  description={`${icons.length} free, brush-drawn icons with an optional wobble. Copy them as SVG or install them for React, Vue and Svelte. MIT licensed.`}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "zicons",
+    url: `${SITE.url}/`,
+    description: "Free, brush-drawn SVG icons for React, Vue and Svelte, with an optional wobble.",
+    inLanguage: "en",
+    creator: { "@type": "Person", name: SITE.author, url: SITE.authorUrl },
+  }}
   wide
 >
   <section class="hero relative grid items-center gap-6 pt-10 pb-8 md:grid-cols-[1.2fr_1fr] md:pt-14">

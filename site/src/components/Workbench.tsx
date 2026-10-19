@@ -12,7 +12,7 @@ type Props = {
   icon: Icon;
   index: number;
   total: number;
-  ui: { back: string; action: string; bar: string[]; copy: string; download: string; link: string };
+  ui: { back: string; action: string; bar: string[]; copy: string; download: string; link: string; lede: string };
 };
 
 const SWATCHES = [
@@ -327,6 +327,7 @@ export default function Workbench({ icon, index, total, ui }: Props) {
       <section className="page page-right" aria-label="Get the code">
         <div>
           <h1 className="icon-name">{icon.name}</h1>
+          <p className="lede">{ui.lede}</p>
           <div className="row wrap tags">
             <a className="tape" href={`/?group=${icon.group}`}>
               {icon.groupTitle}
