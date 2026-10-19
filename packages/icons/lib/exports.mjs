@@ -7,6 +7,12 @@ const RESERVED = new Set(
 
 export const camel = (name) => name.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase());
 
+export const pascal = (name) =>
+  name
+    .split("-")
+    .map((w) => w[0].toUpperCase() + w.slice(1))
+    .join("");
+
 export function writeExports(dir, icons) {
   const names = icons.map((i) => {
     const id = camel(i.name);
