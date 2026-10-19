@@ -263,10 +263,6 @@ html[data-boil="off"] .wob {
   white-space: nowrap;
 }
 
-@view-transition {
-  navigation: auto;
-}
-
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.2s;
