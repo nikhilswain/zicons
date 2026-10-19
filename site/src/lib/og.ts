@@ -40,7 +40,10 @@ const text = (s: string, x: number, y: number, size: number, opts: { font?: "dis
 const tape = (s: string, x: number, y: number) =>
   `<g transform="rotate(-3 ${x} ${y})"><rect x="${x - 14}" y="${y - 38}" width="${s.length * 19 + 28}" height="50" fill="${TAPE}"/>${text(s, x, y, 40, { font: "hand" })}</g>`;
 
-const footer = (x: number) => `${text("zicons.zerro.dev", x, 560, 30, { fill: SOFT })}`;
+const button = (s: string, x: number, y: number) => {
+  const w = s.length * 19.5 + 56;
+  return `<g transform="rotate(-1.5 ${x} ${y})"><rect x="${x + 5}" y="${y + 6}" width="${w}" height="64" rx="16" fill="${INK}"/><rect x="${x}" y="${y}" width="${w}" height="64" rx="16" fill="${CORAL}" stroke="${INK}" stroke-width="3.5"/>${text(s, x + 28, y + 43, 34, { fill: "#ffffff" })}</g>`;
+};
 
 export function ogIcon(name: string, d: string): string {
   const size = 430;
@@ -57,7 +60,7 @@ export function ogIcon(name: string, d: string): string {
       text(name, left, base, nameSize) +
       text("free SVG for React, Vue and Svelte", left, base + 66, 46, { font: "hand" }) +
       text("brush-drawn, MIT licensed", left, base + 122, 42, { font: "hand", fill: SOFT }) +
-      footer(left),
+      button("copy the SVG", left, base + 158),
   );
 }
 
@@ -82,6 +85,6 @@ export function ogDefault(ds: string[]): string {
       text("zicons", 90, 270, 140) +
       text("brush-drawn icons for any site", 94, 345, 46, { font: "hand" }) +
       text("SVG, React, Vue and Svelte", 94, 400, 42, { font: "hand", fill: SOFT }) +
-      footer(94),
+      button("browse the icons", 94, 436),
   );
 }
