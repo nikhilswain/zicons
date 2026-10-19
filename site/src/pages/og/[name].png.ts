@@ -1,9 +1,9 @@
 import type { APIRoute, GetStaticPaths } from "astro";
 import { Resvg } from "@resvg/resvg-js";
-import { getIcon, icons, related } from "../../data/icons";
-import { ogDefault, ogIcon } from "../../lib/og";
+import { getIcon, icons } from "../../data/icons";
+import { OG_FONTS, ogDefault, ogIcon } from "../../lib/og";
 
-const HERO = ["pencil", "brush", "heart", "palette", "sparkle", "cloud", "eraser", "star", "layers", "magic-wand"];
+const HERO = ["pencil", "heart", "palette", "sparkle", "brush", "star"];
 
 export const getStaticPaths: GetStaticPaths = () => [
   { params: { name: "default" } },
@@ -12,13 +12,7 @@ export const getStaticPaths: GetStaticPaths = () => [
 
 export const GET: APIRoute = ({ params }) => {
   const name = params.name!;
-  const svg =
-    name === "default"
-      ? ogDefault(HERO.map((n) => getIcon(n).d))
-      : ogIcon(
-          getIcon(name).d,
-          related(name, 4).map((i) => i.d),
-        );
-  const png = new Resvg(svg).render().asPng();
+  const svg = name === "default" ? ogDefault(HERO.map((n) => getIcon(n).d)) : ogIcon(name, getIcon(name).d);
+  const png = new Resvg(svg, { font: { fontFiles: OG_FONTS, loadSystemFonts: false, defaultFontFamily: "Shantell Sans" } }).render().asPng();
   return new Response(png, { headers: { "Content-Type": "image/png" } });
 };
