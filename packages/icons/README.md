@@ -1,17 +1,48 @@
 # zicons
 
-A brush-drawn icon set, first drawn for Zketch: one even, brush-drawn line with generously rounded corners.
-This folder is self-contained; it can be copied anywhere and used on its own.
+A brush-drawn icon set, first drawn for [Zketch](https://zketch.zerro.dev): one even line with
+generously rounded corners, and a wobble you can switch on. Browse them at
+[zicons.zerro.dev](https://zicons.zerro.dev).
+
+This is the core package: plain SVG files, a sprite, the icon data, and a tiny `toSvg()` for plain
+JavaScript. For components, use [`zicons-react`](https://www.npmjs.com/package/zicons-react),
+[`zicons-vue`](https://www.npmjs.com/package/zicons-vue) or
+[`zicons-svelte`](https://www.npmjs.com/package/zicons-svelte).
+
+```sh
+npm i zicons
+```
+
+## In JavaScript
+
+```js
+import { pencil, chevronDown, toSvg } from "zicons";
+
+button.innerHTML = toSvg(pencil);
+badge.innerHTML = toSvg(chevronDown, { size: 32, color: "#ff4757", boil: "hover" });
+```
+
+Each icon is a named export in camelCase (`chevron-down` is `chevronDown`), so only the icons you
+import end up in your bundle. `toSvg(icon, options)` returns the SVG as a string. Options:
+
+| Option                | Default        | What it does                                                      |
+| --------------------- | -------------- | ----------------------------------------------------------------- |
+| `size`                | `24`           | Width and height. A number (pixels) or any CSS length (`"1.5em"`). |
+| `color`               | `currentColor` | Line colour. By default the icon takes the colour of its text.    |
+| `strokeWidth`         | `1.6`          | Line thickness, in icon units (the icon is drawn on a 24 grid).   |
+| `absoluteStrokeWidth` | `false`        | Keep the line the same thickness on screen at any numeric size.   |
+| `boil`                | `false`        | `true` wobbles all the time; `"hover"` wobbles on hover or focus.  |
+| `aria-label`          |                | Names the icon (`role="img"`). Without it the icon is `aria-hidden`. |
+| `attrs`               |                | Any other attributes for the `<svg>`, like `{ class: "icon" }`.     |
 
 ## Files
 
-- `svg/<name>.svg`: one standalone SVG per icon.
-- `sprite.svg`: every icon as a `<symbol id="<name>">`. Symbols leave the stroke width to the outer `<svg>`.
-- `dist/icons.json`: `[{ name, group, groupTitle, tags, d }]`, the data the site reads.
-- `tags.json`: search words for each icon.
-- `gallery.html`: a contact sheet of every icon at 14, 18, 24 and 56 px.
-- `defs/`: the drawings, written as centrelines (rounded polygons, paths, circles, arcs, dots).
-- `lib/`, `build.mjs`: the generator that turns the drawings into SVG.
+- `zicons/svg/<name>.svg`: one standalone SVG per icon.
+- `zicons/sprite.svg`: every icon as a `<symbol id="<name>">`. Host it yourself and set the stroke on
+  the outer `<svg>`: `<svg width="24" height="24" stroke-width="1.6"><use href="/sprite.svg#pencil" /></svg>`.
+- `zicons/icons.json`: `[{ name, group, groupTitle, tags, d }]`, every icon with its search words.
+
+An SVG used as an `<img>` draws in black, because `currentColor` only works for inline SVG.
 
 ## Style
 
@@ -22,21 +53,12 @@ This folder is self-contained; it can be copied anywhere and used on its own.
 - Rounded corners wherever a shape has one; no sharp points.
 - Few strokes per icon, each one a single pen movement.
 
-## Using the icons
-
-Inline an SVG file to let it take the text colour, or point at the sprite and set the stroke width
-on the outer `<svg>`:
-
-```html
-<span style="color:#FF6B5B">
-  <svg width="18" height="18" stroke-width="1.6"><use href="sprite.svg#pencil" /></svg>
-</span>
-```
-
-Or use a file directly as an image (`<img src="svg/pencil.svg">`); as an image it draws in black,
-because `currentColor` only works for inline SVG.
-
 ## Building
 
-`node build.mjs` regenerates `svg/`, `sprite.svg`, `dist/icons.json` and `gallery.html`, and writes
-nothing outside this folder. It warns about icons that have no tags.
+In the zicons repository, `node build.mjs` regenerates `svg/`, `sprite.svg`, `dist/` and
+`gallery.html` from the drawings in `defs/` and the search words in `tags.json`. It warns about icons
+that have no tags.
+
+## License
+
+MIT, by [zero](https://zerro.dev).

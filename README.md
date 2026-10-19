@@ -5,24 +5,37 @@ of [Zketch](https://zketch.zerro.dev), the doodle app.
 
 Browse, restyle and copy them at **[zicons.zerro.dev](https://zicons.zerro.dev)**.
 
-## Using the icons
+## Packages
+
+| Package | Install | Use |
+| --- | --- | --- |
+| [`zicons`](packages/icons) | `npm i zicons` | SVG files, the sprite, `icons.json`, and `toSvg(pencil)` for plain JS |
+| [`zicons-react`](packages/react) | `npm i zicons-react` | `<PencilIcon size={32} boil />` |
+| [`zicons-vue`](packages/vue) | `npm i zicons-vue` | `<PencilIcon :size="32" boil />` |
+| [`zicons-svelte`](packages/svelte) | `npm i zicons-svelte` | `<PencilIcon size={32} boil />` |
+
+Every component takes `size`, `color`, `strokeWidth`, `absoluteStrokeWidth` and `boil` (`true`, or
+`"hover"` to wobble only on hover or focus). Only the icons you import end up in your bundle.
+
+## Without npm
 
 - **Inline SVG:** copy an icon from the site and paste it into your HTML. It takes the text colour.
 - **Sprite:** host `sprite.svg` yourself and write
   `<svg width="24" height="24" stroke-width="1.6"><use href="/sprite.svg#pencil" /></svg>`.
 - **Image:** `<img src="https://zicons.zerro.dev/svg/pencil.svg">`. Images draw in black, because
   `currentColor` only works inline.
-- **Frameworks:** every icon page has React, Vue and Svelte versions you can copy as a component.
+- **Frameworks:** every icon page also has React, Vue and Svelte components you can paste in.
 - **Wobble:** add `<script src="https://zicons.zerro.dev/wobble/v1.js"></script>` and give an icon the class
   `zi-boil-sm` to make its line shimmer.
-
-npm packages are planned.
 
 ## Repository
 
 - `packages/icons`: the drawings (`defs/`), search tags (`tags.json`) and the generator that writes `svg/`,
   `sprite.svg` and `dist/icons.json`. See its [README](packages/icons/README.md) for the style rules.
-- `site`: the Astro site. It reads only `dist/icons.json`.
+- `packages/react`, `packages/vue`, `packages/svelte`: the framework packages. Each generates one
+  component per icon from `dist/icons.json`; the shared rendering and wobble rules live in
+  `packages/icons/runtime/render.js`.
+- `site`: the Astro site. It reads `dist/icons.json` and the wobble values from `zicons/render`.
 
 ```sh
 npm install
@@ -31,8 +44,15 @@ npm run build
 npm run preview
 ```
 
-`npm run dev` builds the icons and starts the site at `http://localhost:4321`. `npm run preview` serves the
-built site through Wrangler, the same way Cloudflare does.
+`npm run dev` builds the icons and starts the site at `http://localhost:4321`. `npm run build` builds the
+icons, the three framework packages and the site. `npm test` runs the package tests (after a build), and
+`npm run check:treeshake` checks that importing one icon stays small. `npm run preview` serves the built
+site through Wrangler, the same way Cloudflare does.
+
+## Publishing
+
+All four packages share one version. After `npm run build && npm test`, publish the core first, then the
+others: `npm publish -w zicons`, then `npm publish -w zicons-react -w zicons-vue -w zicons-svelte`.
 
 ## Deploying
 

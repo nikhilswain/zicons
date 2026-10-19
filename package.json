@@ -8,12 +8,16 @@
   ],
   "scripts": {
     "build:icons": "npm run build -w zicons",
+    "build:packages": "npm run build -w zicons-react -w zicons-vue -w zicons-svelte",
     "dev": "npm run build:icons && npm run dev -w site",
-    "build": "npm run build:icons && npm run build -w site",
+    "build": "npm run build:icons && npm run build:packages && npm run build -w site",
     "preview": "npm run preview -w site",
-    "test": "npm test --workspaces --if-present"
+    "test": "npm test --workspaces --if-present",
+    "check:treeshake": "node scripts/treeshake.mjs"
   },
   "devDependencies": {
+    "esbuild": "^0.28.2",
+    "esbuild-svelte": "^0.9.5",
     "vitest": "^5.0.5"
   }
 }
