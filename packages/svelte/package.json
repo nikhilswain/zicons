@@ -1,0 +1,47 @@
+{
+  "name": "zicons-svelte",
+  "version": "0.1.0",
+  "description": "Brush-drawn zicons as Svelte 5 components, with a wobble you can switch on.",
+  "keywords": [
+    "icons",
+    "svelte",
+    "svg",
+    "brush",
+    "sketch",
+    "doodle",
+    "zicons"
+  ],
+  "homepage": "https://zicons.zerro.dev",
+  "license": "MIT",
+  "author": "zero (https://zerro.dev)",
+  "type": "module",
+  "sideEffects": false,
+  "svelte": "./dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "node generate.mjs",
+    "test": "vitest run --config vitest.config.js",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {
+    "zicons": "^0.1.0"
+  },
+  "peerDependencies": {
+    "svelte": ">=5.20"
+  },
+  "devDependencies": {
+    "svelte": "^5.57.2",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1"
+  }
+}
