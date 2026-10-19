@@ -49,16 +49,6 @@ icons, the three framework packages and the site. `npm test` runs the package te
 `npm run check:treeshake` checks that importing one icon stays small. `npm run preview` serves the built
 site through Wrangler, the same way Cloudflare does.
 
-## Publishing
-
-All four packages share one version. After `npm run build && npm test`, publish the core first, then the
-others: `npm publish -w zicons`, then `npm publish -w zicons-react -w zicons-vue -w zicons-svelte`.
-
-## Deploying
-
-The site is a static-assets Cloudflare Worker (`site/wrangler.jsonc`) on `zicons.zerro.dev`. After
-`npm run build`, log in once with `npx wrangler login`, then run `npx wrangler deploy` from `site/`.
-
 ## License
 
 MIT © 2026 Nikhil Kumar Swain (zero). See [LICENSE](LICENSE).

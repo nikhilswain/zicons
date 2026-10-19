@@ -12,6 +12,12 @@
     "zicons"
   ],
   "homepage": "https://zicons.zerro.dev",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikhilswain/zicons.git",
+    "directory": "packages/svelte"
+  },
+  "bugs": "https://github.com/nikhilswain/zicons/issues",
   "license": "MIT",
   "author": "zero (https://zerro.dev)",
   "type": "module",

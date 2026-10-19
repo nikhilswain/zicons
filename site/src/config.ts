@@ -4,5 +4,5 @@ export const SITE = {
   zketch: "https://zketch.zerro.dev",
   author: "zero",
   authorUrl: "https://zerro.dev",
-  github: "",
+  github: "https://github.com/nikhilswain/zicons",
 };
