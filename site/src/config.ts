@@ -5,4 +5,5 @@ export const SITE = {
   author: "zero",
   authorUrl: "https://zerro.dev",
   github: "https://github.com/nikhilswain/zicons",
+  x: "@iamn1khil",
 };
