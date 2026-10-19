@@ -1,14 +1,9 @@
-export const WOBBLE_VERSION = 1;
+import { BOIL, SEEDS } from "zicons/render";
 
-const SEEDS = [3, 11, 23];
+export const WOBBLE_VERSION = 1;
 
 const filter = (id: string, freq: number, scale: number, seed: number) =>
   `<filter id="${id}" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="${freq}" numOctaves="2" seed="${seed}"/><feDisplacementMap in="SourceGraphic" scale="${scale}" xChannelSelector="R" yChannelSelector="G"/></filter>`;
-
-export const BOIL = {
-  big: { freq: 0.03, scale: 4 },
-  small: { freq: 0.09, scale: 1.4 },
-};
 
 export function wobbleDefs(): string {
   const big = SEEDS.map((s, k) => filter(`zi-boil-${k + 1}`, BOIL.big.freq, BOIL.big.scale, s)).join("");

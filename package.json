@@ -12,5 +12,8 @@
     "build": "npm run build:icons && npm run build -w site",
     "preview": "npm run preview -w site",
     "test": "npm test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "vitest": "^5.0.5"
   }
 }

@@ -6,3 +6,4 @@ site/public/sprite.svg
 site/public/svg/
 .wrangler/
 .DS_Store
+packages/*/dist/

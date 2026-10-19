@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { GROUP_TITLES, loadCatalog } from "./lib/catalog.mjs";
 import { STYLE, iconSvg, spriteSvg } from "./lib/svg.mjs";
+import { writeExports } from "./lib/exports.mjs";
 
 const root = dirname(fileURLToPath(import.meta.url));
 const byName = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
@@ -18,6 +19,7 @@ writeFileSync(join(root, "sprite.svg"), spriteSvg(sorted));
 
 mkdirSync(join(root, "dist"), { recursive: true });
 writeFileSync(join(root, "dist", "icons.json"), `${JSON.stringify(icons, null, 2)}\n`);
+writeExports(join(root, "dist"), icons);
 
 {
   const svg = (d, px) => `<svg width="${px}" height="${px}" viewBox="${STYLE.viewBox}" fill="none" stroke="currentColor" stroke-width="${STYLE.strokeWidth}" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`;

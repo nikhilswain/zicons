@@ -1,22 +1,44 @@
 {
   "name": "zicons",
-  "version": "0.0.0",
-  "private": true,
-  "description": "A brush-drawn icon set: one even line with generously rounded corners.",
+  "version": "0.1.0",
+  "description": "A brush-drawn icon set: one even line with generously rounded corners, and a wobble you can switch on.",
+  "keywords": [
+    "icons",
+    "svg",
+    "brush",
+    "sketch",
+    "doodle",
+    "zicons"
+  ],
+  "homepage": "https://zicons.zerro.dev",
   "license": "MIT",
   "author": "zero (https://zerro.dev)",
   "type": "module",
+  "sideEffects": false,
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./render": {
+      "types": "./runtime/render.d.ts",
+      "default": "./runtime/render.js"
+    },
     "./icons.json": "./dist/icons.json",
     "./sprite.svg": "./sprite.svg",
     "./svg/*": "./svg/*"
   },
   "files": [
     "dist",
+    "runtime",
     "svg",
-    "sprite.svg"
+    "sprite.svg",
+    "LICENSE",
+    "README.md"
   ],
   "scripts": {
-    "build": "node build.mjs"
+    "build": "node build.mjs",
+    "test": "vitest run",
+    "prepublishOnly": "npm run build"
   }
 }
