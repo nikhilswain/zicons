@@ -441,8 +441,83 @@
   color: var(--code-ink);
 }
 
-.codebox .code {
+.code-shell {
+  display: flex;
   height: 280px;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--code-bg);
+  border-radius: 4px 14px 12px 16px;
+}
+
+.code-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px 8px 16px;
+  border-bottom: 1.5px dashed #ecebe733;
+  color: var(--code-ink);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+}
+
+.install {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.install svg {
+  opacity: 0.6;
+}
+
+.install:hover svg {
+  opacity: 1;
+}
+
+.code-hint {
+  opacity: 0.6;
+}
+
+.way {
+  display: flex;
+  flex: none;
+  gap: 2px;
+  padding: 2px;
+  border: 1.5px solid #ecebe766;
+  border-radius: 9px 11px 8px 12px;
+}
+
+.way button {
+  padding: 1px 9px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.way button[aria-pressed="true"] {
+  background: var(--code-ink);
+  color: var(--code-bg);
+}
+
+.code-shell .code {
+  flex: 1;
+  min-height: 0;
+  border-radius: 0;
+}
+
+.codebox .code {
   margin: 0;
   white-space: pre-wrap;
   word-break: break-all;

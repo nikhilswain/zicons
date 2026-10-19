@@ -15,6 +15,26 @@ const sprite = `<svg width="24" height="24" fill="none" stroke="currentColor"
   <use href="/sprite.svg#heart" />
 </svg>`;
 const img = `<img src="/svg/heart.svg" width="24" height="24" alt="Favourite" />`;
+const packages = [
+  { name: "zicons-react", code: `import { PencilIcon } from "zicons-react";
+
+<PencilIcon size={32} color="#ff4757" />
+<PencilIcon boil />
+<PencilIcon boil="hover" />` },
+  { name: "zicons-vue", code: `import { PencilIcon } from "zicons-vue";
+
+<PencilIcon :size="32" color="#ff4757" />
+<PencilIcon boil />
+<PencilIcon boil="hover" />` },
+  { name: "zicons-svelte", code: `import { PencilIcon } from "zicons-svelte";
+
+<PencilIcon size={32} color="#ff4757" />
+<PencilIcon boil />
+<PencilIcon boil="hover" />` },
+  { name: "zicons", code: `import { pencil, toSvg } from "zicons";
+
+el.innerHTML = toSvg(pencil, { size: 32, boil: "hover" });` },
+];
 const wobbleTag = `<script src="${SITE.url}/wobble/v1.js"></script>
 
 <svg class="zi-boil-sm" …>…</svg>
@@ -34,6 +54,22 @@ const wobbleManual = `<script src="${SITE.url}/wobble/v1.js" data-manual></scrip
       Every icon is one small SVG. Open an icon, set the colour, size and stroke you like, and copy it in the format you
       need. A few things aren't obvious, so they're here.
     </p>
+
+    <h2 id="install">Install</h2>
+    <p>
+      There's a package for React, Vue and Svelte, plus <code>zicons</code> for plain JavaScript. Each icon is its
+      own import, so only the ones you use end up in your bundle. They all take <code>size</code>,
+      <code>color</code>, <code>strokeWidth</code> and <code>boil</code>: <code>boil</code> makes the line wobble,
+      and <code>boil="hover"</code> wobbles only on hover or focus.
+    </p>
+    {
+      packages.map((p) => (
+        <>
+          <p class="pkg"><code>npm i {p.name}</code></p>
+          <pre class="code" set:html={highlightHtml(p.code)} />
+        </>
+      ))
+    }
 
     <h2>Inline SVG</h2>
     <p>
@@ -98,6 +134,9 @@ const wobbleManual = `<script src="${SITE.url}/wobble/v1.js" data-manual></scrip
 </Base>
 
 <style>
+  .pkg {
+    margin-top: 1.4rem;
+  }
   .sprite-get {
     display: flex;
     flex-wrap: wrap;

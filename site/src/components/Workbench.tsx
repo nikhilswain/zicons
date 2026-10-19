@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { Icon } from "../data/icons";
 import { DEFAULTS, loadSettings, sanitize, saveSettings, type Settings } from "../lib/settings";
-import { FORMATS, snippet, type Format } from "../lib/snippets";
+import { FORMATS, isFramework, npmSnippet, pascal, snippet, type Format } from "../lib/snippets";
 import { copyText, download } from "../lib/copy";
 import { svgToPng } from "../lib/png";
 import { toast } from "../lib/toast";
@@ -27,6 +27,7 @@ const SIZES = [14, 18, 24, 32, 48];
 const GRID_MIN = 72;
 const WOBBLE_TAG = `<script src="${SITE.url}/wobble/v1.js"></script>`;
 const TAB_KEY = "zicons:tab";
+const WAY_KEY = "zicons:way";
 
 function Glyph({ d, size, color, stroke, className }: { d: string; size: number | string; color?: string; stroke?: number; className?: string }) {
   return (
@@ -50,6 +51,7 @@ function Glyph({ d, size, color, stroke, className }: { d: string; size: number 
 export default function Workbench({ icon, index, total, ui }: Props) {
   const [s, setS] = useState<Settings>(DEFAULTS);
   const [tab, setTab] = useState<Format>("svg");
+  const [way, setWay] = useState<"npm" | "paste">("npm");
   const [grid, setGrid] = useState(true);
   const [view, setView] = useState<"fit" | "real">("fit");
   const [ready, setReady] = useState(false);
@@ -74,6 +76,7 @@ export default function Workbench({ icon, index, total, ui }: Props) {
     try {
       const t = localStorage.getItem(TAB_KEY) as Format | null;
       if (t && FORMATS.some((f) => f.key === t)) setTab(t);
+      if (localStorage.getItem(WAY_KEY) === "paste") setWay("paste");
     } catch {}
     setReady(true);
     const root = document.documentElement;
@@ -113,7 +116,16 @@ export default function Workbench({ icon, index, total, ui }: Props) {
     } catch {}
   };
 
-  const code = useMemo(() => snippet(tab, icon, s), [tab, icon, s]);
+  const pickWay = (w: "npm" | "paste") => {
+    setWay(w);
+    try {
+      localStorage.setItem(WAY_KEY, w);
+    } catch {}
+  };
+
+  const fw = isFramework(tab) ? tab : null;
+  const npm = useMemo(() => (fw ? npmSnippet(fw, icon, s) : null), [fw, icon, s]);
+  const code = useMemo(() => (npm && way === "npm" ? npm.code : snippet(tab, icon, s)), [npm, way, tab, icon, s]);
   const shown = useMemo(() => tokenize(code.split(icon.d).join(`${icon.d.slice(0, 42)}…`)), [code, icon.d]);
   const label = FORMATS.find((f) => f.key === tab)!.label.replace("+ ", "");
   const color = s.color === "currentColor" ? undefined : s.color;
@@ -164,6 +176,10 @@ export default function Workbench({ icon, index, total, ui }: Props) {
 
   const onScriptTag = async () => {
     toast((await copyText(WOBBLE_TAG)) ? "copied the script tag" : "couldn't copy the script tag");
+  };
+
+  const onInstall = async () => {
+    if (npm) toast((await copyText(npm.install)) ? `copied ${npm.install}` : "couldn't copy the install line");
   };
 
   const onLink = async () => {
@@ -340,9 +356,31 @@ export default function Workbench({ icon, index, total, ui }: Props) {
               </button>
             ))}
           </div>
-          <pre className="code" role="tabpanel" tabIndex={0}>
-            {shown.map((t, k) => (t.kind === "text" ? t.text : <span key={k} className={`tk-${t.kind}`}>{t.text}</span>))}
-          </pre>
+          <div className="code-shell" role="tabpanel">
+            {npm && (
+              <div className="code-head">
+                {way === "npm" ? (
+                  <button type="button" className="install" onClick={onInstall} title="Copy the install command">
+                    <span className="tk-punct">$</span> {npm.install}
+                    <Glyph d={ui.copy} size={14} />
+                  </button>
+                ) : (
+                  <span className="code-hint">a self-contained component, nothing to install</span>
+                )}
+                <div className="way" role="group" aria-label="How to get it">
+                  <button type="button" aria-pressed={way === "npm"} onClick={() => pickWay("npm")}>
+                    npm
+                  </button>
+                  <button type="button" aria-pressed={way === "paste"} onClick={() => pickWay("paste")}>
+                    paste
+                  </button>
+                </div>
+              </div>
+            )}
+            <pre className="code" tabIndex={0}>
+              {shown.map((t, k) => (t.kind === "text" ? t.text : <span key={k} className={`tk-${t.kind}`}>{t.text}</span>))}
+            </pre>
+          </div>
           <textarea ref={codeRef} className="sr-only" value={code} readOnly tabIndex={-1} aria-hidden="true" />
         </div>
 
@@ -365,6 +403,9 @@ export default function Workbench({ icon, index, total, ui }: Props) {
         </div>
         {tab === "wobble" ? (
           <div className="script-hint">
+            <p className="hand note">
+              with the npm packages it's one prop: <code>&lt;{pascal(icon.name)}Icon boil /&gt;</code>
+            </p>
             <p className="hand note">
               using a few icons? one script tag does this for all of them, then add <code>class="zi-boil-sm"</code> to any icon
             </p>
